@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/edu/vendor/layui/css/layui.css"  media="all">
+  <style type="text/css">
+    .layui-form-label{
+      width: 60px;
+      padding-left:10px; 
+    } 
+    .top{
+      width: 80%;
+      margin-left:2%;
+      margin-top:2%
+    }
+    .add,.select,.reset{
+      height: 36px;
+    }
+    .select{
+      margin-left: 25px;
+    }
+    #add,#edit{
+      width:100%; 
+      height:100%;
+      display:none;
+    }
+    .button_div{
+      width: 80%;
+      margin-left: 185px;
+    }
+    .input{
+      width: 676px;
+    }
+    .input input{
+      border-color: #000000;
+    }
+    .input select{
+      width: 114px;
+      height: 38px;
+      border-color: #000000;
+    }
+    .name_div{
+      margin-left: 75px;
+      margin-top: 15px;
+    }
+    .datetime{
+      margin-left: 75px;  
+    }
+    .expiration{
+      margin-top: 15px;
+      margin-bottom: 25px;
+    }
+    .date_tool{
+      margin-left: 25px;
+    }
+    .add_look{
+      width: 220px;
+      height: 110px;
+      margin-left: 185px;
+      display: none;
+    }
+    .add_look img {
+      width: 110px;
+      height: 110px;
+      display: block;
+      float: left;
+    }
+    #addText{
+      width: 110px;
+      margin-top: 50px;
+      float: left;
+    }
+    #addText span{
+      margin-left: 20px;
+    }
+    #addText a{
+      margin-left: 20px;
+    }
+    #editText{
+      width: 110px;
+      margin-top: 50px;
+      float: left;
+    }
+    #editText span{
+      margin-left: 20px;
+    }
+    #editText a{
+      margin-left: 20px;
+    }
+  </style>
+</head>
+<body>  
+ 
+<!-- <div class="layui-btn-group demoTable">
+  <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
+  <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
+  <button class="layui-btn" data-type="isAll">验证是否全选</button>
+</div> -->
+<div class="top">
+  <button class="layui-btn layui-btn-warm add">新 增</button>
+  <div class="layui-inline">
+    <label class="layui-form-label">会员姓名:</label>
+    <div class="layui-input-inline">
+      <input type="tel" name="username" lay-verify="required|phone" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-inline">
+    <label class="layui-form-label">会员电话:</label>
+    <div class="layui-input-inline">
+      <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-inline">
+    <label class="layui-form-label">校区来源:</label>
+    <div class="layui-input-inline">
+      <select name="campus" style="width:180px;height:36px;border-color:#D2D2D2;">
+        <option value="">请选择</option>
+        {volist name="list" id="svo"}
+          <option value="{$svo.campusname}">{$svo.campusname}</option>
+        {/volist}
+      </select>
+    </div>
+  </div>
+  <div class="layui-inline">
+    <label class="layui-form-label">性别:</label>
+    <div class="layui-input-inline">
+      <select name="sex" style="width:80px;height:36px;border-color:#D2D2D2;">
+        <option value="">请选择</option>
+        <option value="男">男</option>
+        <option value="女">女</option>
+      </select>
+    </div>
+  </div>
+  <button class="layui-btn layui-btn-normal select">查 询</button>
+  <button class="layui-btn layui-btn-danger reset">重 置</button>
+</div>
+<div style="margin-left:2%;">
+  <table class="layui-hide" id="user" lay-filter="user"></table>
+</div>
+<!--............................新增页面.................................-->
+<div id="add">
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">会员名称</label>
+    <div class="layui-input-block input">
+      <input type="text" name="add_username" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">会员账号</label>
+    <div class="layui-input-block input">
+      <input type="text" name="add_usernumber" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">会员密码</label>
+    <div class="layui-input-block input">
+      <input type="password" name="add_password" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">会员头像</label>
+    <div class="layui-input-block input">
+      <button type="button" class="layui-btn" id="add_logo"><i class="layui-icon"></i>上传图片</button>
+    </div>
+  </div>
+  <div class="layui-upload-list add_look">
+    <img class="layui-upload-img" id="add_look">
+    <p id="addText"></p>
+  </div>
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">会员性别</label>
+    <div class="layui-input-block input">
+      <select name="add_sex">
+        <option value="" selected="">请选择</option>
+        <option value="男">男</option>
+        <option value="女">女</option>
+      </select>
+    </div>
+  </div>
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">会员年龄</label>
+    <div class="layui-input-block input">
+      <input type="text" name="add_age" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">身份证号</label>
+    <div class="layui-input-block input">
+      <input type="text" name="add_idnumber" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">手机号码</label>
+    <div class="layui-input-block input">
+      <input type="text" name="add_phone" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">校区来源</label>
+    <div class="layui-input-block input">
+      <select name="add_campussource">
+        <option value="" selected="">请选择</option>
+        {volist name="list" id="avo"}
+          <option value="{$avo.campusname}">{$avo.campusname}</option>
+        {/volist}
+      </select>
+    </div>
+  </div>
+  <div>
+    <div class="layui-inline datetime">
+      <label class="layui-form-label">注册时间</label>
+      <div class="layui-input-inline date_tool">
+        <input type="text" class="layui-input" id="add_registerdate" placeholder="yyyy-MM-dd HH:mm:ss">
+      </div>
+    </div>
+  </div>
+  <div class="layui-inline datetime expiration">
+    <label class="layui-form-label">到期时间</label>
+    <div class="layui-input-inline date_tool">
+      <input type="text" class="layui-input" id="add_expirationdate" placeholder="yyyy-MM-dd HH:mm:ss">
+    </div>
+  </div>
+  <div class="button_div">
+    <button class="layui-btn layui-btn-normal add_sure">确定</button>
+    <button class="layui-btn layui-btn-primary add_reset">重置</button>
+  </div>
+</div>
+<!--............................新增页面.................................-->
+<div id="edit">
+  <div class="layui-form-item name_div">
+      <label class="layui-form-label">会员名称</label>
+      <div class="layui-input-block input">
+        <input type="text" name="edit_username" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item name_div">
+      <label class="layui-form-label">会员账号</label>
+      <div class="layui-input-block input">
+        <input type="text" name="edit_usernumber" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item name_div">
+      <label class="layui-form-label">会员密码</label>
+      <div class="layui-input-block input">
+        <input type="password" name="edit_password" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item name_div">
+      <label class="layui-form-label">会员头像</label>
+      <div class="layui-input-block input">
+        <button type="button" class="layui-btn" id="edit_logo"><i class="layui-icon"></i>上传图片</button>
+      </div>
+    </div>
+    <div class="layui-upload-list add_look" style="display:block;">
+      <img class="layui-upload-img" id="edit_look" src="">
+      <p id="editext"></p>
+    </div>
+    <div class="layui-form-item name_div">
+      <label class="layui-form-label">会员性别</label>
+      <div class="layui-input-block input">
+        <select name="edit_sex">
+          <option value="男">男</option>
+          <option value="女">女</option>
+        </select>
+      </div>
+    </div>
+    <div class="layui-form-item name_div">
+      <label class="layui-form-label">会员年龄</label>
+      <div class="layui-input-block input">
+        <input type="text" name="edit_age" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item name_div">
+      <label class="layui-form-label">身份证号</label>
+      <div class="layui-input-block input">
+        <input type="text" name="edit_idnumber" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item name_div">
+      <label class="layui-form-label">手机号码</label>
+      <div class="layui-input-block input">
+        <input type="text" name="edit_phone" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item name_div">
+      <label class="layui-form-label">校区来源</label>
+      <div class="layui-input-block input">
+        <select name="edit_campussource">
+          {volist name="list" id="evo"}
+            <option value="{$evo.campusname}">{$evo.campusname}</option>
+          {/volist}
+        </select>
+      </div>
+    </div>
+    <div>
+      <div class="layui-inline datetime">
+        <label class="layui-form-label">注册时间</label>
+        <div class="layui-input-inline date_tool">
+          <input type="text" class="layui-input" id="edit_registerdate" placeholder="yyyy-MM-dd HH:mm:ss">
+        </div>
+      </div>
+    </div>
+    <div class="layui-inline datetime expiration">
+      <label class="layui-form-label">到期时间</label>
+      <div class="layui-input-inline date_tool">
+        <input type="text" class="layui-input" id="edit_expirationdate" placeholder="yyyy-MM-dd HH:mm:ss">
+      </div>
+    </div>
+    <div class="button_div">
+      <button class="layui-btn layui-btn-normal edit_sure">确定</button>
+      <button class="layui-btn layui-btn-primary edit_reset">重置</button>
+    </div>
+</div> 
+<script type="text/html" id="userDo">
+  <!--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>-->
+  <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">禁用</a>
+</script>
+               
+          
+<script src="/edu/vendor/layui/layui.js" charset="utf-8"></script>
+<script>
+layui.use(['jquery','table','laydate','upload'], function(){
+  var table = layui.table,
+  $ = layui.jquery;
+  var laydate = layui.laydate;
+  var upload = layui.upload;
+  table.render({
+    elem: '#user'
+    ,url: './selectUserInfo/'
+    ,cols: [[
+      {field:'id', width:'6%', title: '会员ID',align: 'center'}
+      ,{field:'username', width:'6%', title: '会员姓名', align: 'center'}
+      ,{field:'usernumber', width:'6%', title: '会员账号', align: 'center'}
+      ,{field:'phone', width:'8%', title: '会员电话', align: 'center'}
+      ,{field:'sex', width:'6%', title: '会员性别', align: 'center'}
+      ,{field:'age', width:'6%', title: '会员年龄', align: 'center'}
+      ,{field:'idnumber', width:'12%', title: '会员身份证', align: 'center'}
+      ,{field:'campussource', width:'10%', title: '校区来源', align: 'center'}
+      ,{field:'registerdate', width:'14%', title: '注册时间', align: 'center'}
+      ,{field:'expirationdate', width:'14%', title: '到期时间', align: 'center'}
+      ,{fixed:'right', title: '操作', width: '12.4%', align: 'center', toolbar: '#userDo'}
+    ]]
+    ,page: true
+    ,limits: [10, 15, 20]
+    ,limit: 15
+    ,done: function(res,page,cout){
+      //console.log(res)
+    }
+  });
+
+  //条件查询
+  $('.select').on("click",function(){
+    var obj = {};
+    $('input[name="username"]').val()?obj.username = $('input[name="username"]').val():'';
+    $('input[name="phone"]').val()?obj.phone = $('input[name="phone"]').val():'';
+    $('select[name="campus"]').val()?obj.campus = $('select[name="campus"]').val():'';
+    $('select[name="sex"]').val()?obj.sex = $('select[name="sex"]').val():'';
+    table.reload('user',{
+      url: './selectUserInfo/'
+      ,where: obj
+      ,page: {
+        curr: 1 //重新从第 1 页开始
+      }
+      ,done: function(res,page,cout){
+        //console.log(res)
+      }
+    });
+  });
+
+  //重置
+  $('.reset').on("click",function(){
+      location.reload();
+  });
+  /**
+   * 新增
+   */
+  $('.add').on("click",function(){
+    layer.open({
+        title: '添加会员'
+        ,
+        type: 1
+        ,
+        area: ['100%', '100%']
+        ,
+        id: 'layerAdd' //防止重复弹出
+        ,
+        content: $("#add")
+        ,
+        btnAlign: 'r' //按钮居中
+        ,
+        shade: 0.5 //不显示遮罩
+
+    });
+  });
+  var add = {};
+  //普通图片上传
+  var uploadInst = upload.render({
+    elem: '#add_logo'
+    ,url: './uploadImg/'
+    ,before: function(obj){
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('.add_look').css('display', 'block');
+        $('#add_look').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){
+      //如果上传失败
+      if(res.code > 0){
+        //演示失败状态，并实现重传
+        var demoText = $('#addText');
+        demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+        demoText.find('.demo-reload').on('click', function(){
+          uploadInst.upload();
+        });
+        return layer.msg('上传失败');
+      }
+      //上传成功
+      if(res.code==0){
+        $('#addText').html('');
+        add.userlogo = res.msg;
+        return layer.msg('上传成功');    
+      }
+    }
+  });
+  //日期插件
+  //日期时间选择器
+  laydate.render({
+    elem: '#add_registerdate'
+    ,type: 'datetime'
+  });
+  laydate.render({
+    elem: '#add_expirationdate'
+    ,type: 'datetime'
+  });
+  //新增提交
+  $('.add_sure').on("click",function(){
+    add.username = $('input[name="add_username"]').val();
+    add.usernumber = $('input[name="add_usernumber"]').val();
+    add.password = $('input[name="add_password"]').val();
+    add.sex = $('select[name="add_sex"]').val();
+    add.age = $('input[name="add_age"]').val();
+    add.idnumber = $('input[name="add_idnumber"]').val();
+    add.phone = $('input[name="add_phone"]').val();
+    add.campussource = $('select[name="add_campussource"]').val();
+    add.registerdate = $('#add_registerdate').val();
+    add.expirationdate = $('#add_expirationdate').val();
+    //提交数据
+    $.post("./userDoAdd",add,function(data){
+      if(data.code==0){
+        location.reload();
+      }else{
+        layer.msg(data.result,{time: 2000});
+      }
+    },"json");
+  });
+  //重置
+
+  //监听工具条
+  var edit = {};
+  table.on('tool(user)', function(obj){
+    var data = obj.data;
+    var str = '';
+    if(obj.event === 'edit'){
+      //修改
+      $.post('./userDetail',{"id":data.id},function(e){
+        var msg = e.msg;
+        edit.id = msg.id;
+        $('input[name="edit_username"]').val(msg.username);
+        $('input[name="edit_usernumber"]').val(msg.usernumber);
+        $('input[name="edit_password"]').val(msg.password);
+        $('select[name="edit_sex"]').val(msg.sex);
+        $('input[name="edit_age"]').val(msg.age);
+        $('input[name="edit_idnumber"]').val(msg.idnumber);
+        $('input[name="edit_phone"]').val(msg.phone);
+        $('select[name="edit_campussource"]').val(msg.campussource);
+        $('#edit_registerdate').val(msg.registerdate);
+        $('#edit_expirationdate').val(msg.expirationdate);
+        msg.userlogo?$('#edit_look').attr('src',msg.userlogo):'';
+      },"json");
+      layer.open({
+        title: '修改会员'
+        ,
+        type: 1
+        ,
+        area: ['100%', '100%']
+        ,
+        id: 'layerEdit' //防止重复弹出
+        ,
+        content: $("#edit")
+        ,
+        btnAlign: 'r' //按钮居中
+        ,
+        shade: 0.5 //不显示遮罩
+
+    });
+    } else if(obj.event === 'del'){
+      //删除
+    }
+  });
+
+  //修改提交
+  $('.edit_sure').on("click",function(){
+    edit.username = $('input[name="edit_username"]').val();
+    edit.usernumber = $('input[name="edit_usernumber"]').val();
+    edit.password = $('input[name="edit_password"]').val();
+    edit.sex = $('select[name="edit_sex"]').val();
+    edit.age = $('input[name="edit_age"]').val();
+    edit.idnumber = $('input[name="edit_idnumber"]').val();
+    edit.phone = $('input[name="edit_phone"]').val();
+    edit.campussource = $('select[name="edit_campussource"]').val();
+    edit.registerdate = $('#edit_registerdate').val();
+    edit.expirationdate = $('#edit_expirationdate').val();
+    //提交数据
+    $.post("./userDoEdit",edit,function(data){
+      if(data.code==0){
+        location.reload();
+      }else{
+        layer.msg(data.result,{time: 2000});
+      }
+    },"json");
+  });
+  var uploadInstEdit = upload.render({
+    elem: $('#edit_logo')
+    ,url: './uploadImg/'
+    ,before: function(obj){
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#edit_look').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){
+      //如果上传失败
+      if(res.code > 0){
+        //演示失败状态，并实现重传
+        var demoText = $('#editText');
+        demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+        demoText.find('.demo-reload').on('click', function(){
+          uploadInstEdit.upload();
+        });
+        return layer.msg('上传失败');
+      }
+      //上传成功
+      if(res.code==0){
+        $('#editText').html('');
+        edit.userlogo = res.msg;
+        return layer.msg('上传成功');    
+      }
+    }
+  });
+  laydate.render({
+    elem: '#edit_registerdate'
+    ,type: 'datetime'
+  });
+  laydate.render({
+    elem: '#edit_expirationdate'
+    ,type: 'datetime'
+  }); 
+  //
+});
+</script>
+
+</body>
+</html>

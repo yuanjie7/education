@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/edu/vendor/layui/css/layui.css"  media="all">
+  <style type="text/css">
+    .layui-form-label{
+      width: 60px;
+      padding-left:10px; 
+    } 
+    .top{
+      width: 80%;
+      margin-left:2%;
+      margin-top:2%
+    }
+    .add,.select,.reset{
+      height: 36px;
+    }
+    .select{
+      margin-left: 25px;
+    }
+    #add,#edit{
+      width:100%; 
+      height:100%;
+      display:none;
+    }
+    .button_div{
+      width: 80%;
+      margin-left: 185px;
+    }
+    .input{
+      width: 676px;
+    }
+    .input input{
+      border-color: #000000;
+    }
+    .name_div{
+      margin-left: 75px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>  
+<div class="top">
+  <button class="layui-btn layui-btn-warm add">新 增</button>
+  <div class="layui-inline">
+    <label class="layui-form-label">分类名称:</label>
+    <div class="layui-input-inline">
+      <input type="tel" name="username" lay-verify="required|phone" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <button class="layui-btn layui-btn-normal select">查 询</button>
+  <button class="layui-btn layui-btn-danger reset">重 置</button>
+</div>
+<div style="margin-left:2%;">
+  <table class="layui-hide" id="user" lay-filter="user"></table>
+</div>
+ 
+
+<div id="add">
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">分类名称</label>
+    <div class="layui-input-block input">
+      <input type="text" name="classname" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+    </div>
+  </div>
+  <div class="button_div">
+    <button class="layui-btn layui-btn-normal add_sure">确定</button>
+    <button class="layui-btn layui-btn-primary add_reset">重置</button>
+  </div>
+</div>
+<div id="edit"></div>
+<script type="text/html" id="userDo">
+  <!--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>-->
+  <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+  <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">禁用</a>-->
+</script>
+               
+          
+<script src="/edu/vendor/layui/layui.js" charset="utf-8"></script>
+<script>
+layui.use(['jquery','table'], function(){
+  var table = layui.table,
+  $ = layui.jquery;
+  var index;
+  table.render({
+    elem: '#user'
+    ,url: './selectClassInfo/'
+    ,cols: [[
+      {field:'classname', width:'50%', title: '分类名称', align: 'center'}
+      ,{fixed:'right', title: '操作', width: '50%', align: 'center', toolbar: '#userDo'}
+    ]]
+    ,page: true
+    ,limits: [10, 15, 20]
+    ,limit: 15
+    ,done: function(res,page,cout){
+      //console.log(res)
+    }
+  });
+  //新增
+  $('.add').on("click",function(){
+      index = layer.open({
+        title: '添加分类'
+        ,
+        type: 1
+        ,
+        area: ['100%', '100%']
+        ,
+        id: 'layerAdd' //防止重复弹出
+        ,
+        content: $("#add")
+        ,
+        btnAlign: 'r' //按钮居中
+        ,
+        shade: 0.5 //不显示遮罩
+
+    });
+  });
+  //条件查询
+  $('.select').on("click",function(){
+    var obj = {};
+    $('input[name="username"]').val()?obj.classname = $('input[name="username"]').val():'';
+    for(i in obj){
+      if(obj[i]){
+        table.reload('user',{
+          url: './selectClassInfo/'
+          ,where: obj
+          ,page: {
+            curr: 1 //重新从第 1 页开始
+          }
+          ,done: function(res,page,cout){
+            //console.log(res)
+          }
+        });
+      }
+    }
+  });
+
+  //重置
+  $('.reset').on("click",function(){
+      location.reload();
+  });
+
+  /**
+   * 新增
+   */
+  //确定
+  $('.add_sure').on("click",function(){
+    var obj = {};
+    obj.classname = $('input[name="classname"]').val();
+    if(!obj.classname){
+      layer.msg('请填写分类名称',{time: 1500});
+      return false;
+    }
+    $.post("./classDoAdd",obj,function(data){
+      if(data.code==0){
+        location.reload();
+        //layer.close(index);
+      }else{
+        layer.msg(data.result,{time: 2000});
+      }
+    },"json");
+  });
+  //重置
+  $('.add_reset').on("click",function(){
+      $('input[name="classname"]').val('');
+  });
+
+  //监听工具条
+  table.on('tool(user)', function(obj){
+    var data = obj.data;
+    var str = '';
+    if(obj.event === 'edit'){
+      //修改
+      $.post('./classDetail',{"id":data.id},function(e){
+        var msg = e.msg;
+        str += divTag(msg);
+        $('#edit').html(str);
+      },"json");
+      index = layer.open({
+          title: '修改分类'
+          ,
+          type: 1
+          ,
+          area: ['100%', '100%']
+          ,
+          id: 'layerEdit' //防止重复弹出
+          ,
+          content: $('#edit')
+          ,
+          btnAlign: 'r' //按钮居中
+          ,
+          shade: 0.5 //不显示遮罩
+
+      });
+    } else if(obj.event === 'del'){
+      //删除
+    }
+  });
+  /**
+   * 编辑
+   */
+  //确定
+  $(document).on("click",'.edit_sure',function(){
+    var obj = {};
+    obj.id = $(this).attr('cid');
+    obj.classname = $('input[name="classname_edit"]').val();
+    if(!obj.classname){
+      layer.msg('请填写分类名称',{time: 1500});
+      return false;
+    }
+    $.post("./classDoEdit",obj,function(data){
+      if(data.code==0){
+        location.reload();
+        //layer.close(index);
+      }else{
+        layer.msg(data.result,{time: 2000});
+      }
+    },"json");
+  });
+  //重置
+  $(document).on("click",'.edit_reset',function(){
+      $('input[name="classname_edit"]').val('');
+  });
+  //编辑div
+  function divTag(one){
+    return `<div class="layui-form-item name_div">
+              <label class="layui-form-label">分类名称</label>
+              <div class="layui-input-block input">
+                <input type="text" name="classname_edit" lay-verify="title" autocomplete="off" placeholder="" class="layui-input" value="${one.classname}">
+              </div>
+            </div>
+            <div class="button_div">
+              <button class="layui-btn layui-btn-normal edit_sure" cid="${one.id}">确定</button>
+              <button class="layui-btn layui-btn-primary edit_reset">重置</button>
+            </div>`;
+  }
+});
+</script>
+</body>
+</html>

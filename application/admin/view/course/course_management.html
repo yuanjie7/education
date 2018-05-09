@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/edu/vendor/layui/css/layui.css"  media="all">
+  <style>
+    .tbody{
+      width: 98%;
+      margin-left: 2%;
+      margin-top: 15px;
+    }
+    .top_top{
+      width: 80%;
+      margin-left:2%;
+      margin-top:2%
+    }
+    .top_top .add,.select,.reset{
+      height: 36px;
+    }
+    .top_top .select{
+      margin-left: 25px;
+    }
+    .top_top .layui-form-label{
+      width: 60px;
+      padding-left:10px; 
+    } 
+    .top{
+      width: 100%;
+      height: 42px;
+      line-height: 42px;
+      border-width: 1px;
+      border-style: solid;
+      border-bottom: none;
+      border-color: #e6e6e6;
+      background-color: #f2f2f2;
+    }
+    .first_title{
+      width: 14.2%;
+      float: left;
+      text-align: center;
+    }
+    .second_title{
+      width: 14.2%;
+      height: 42px;
+      float: left;
+    }
+    .third_title{
+      width: 14%;
+      height: 22px;
+      float: left;
+    }
+    .blue{
+      color: #2890CA;
+      cursor: pointer;
+
+    }
+    .list{
+      height: 22px;
+    }
+    .first_tit{
+      margin-left: 1.5%
+    }
+    .red{
+      color: #F56954;
+      cursor: pointer;
+    }
+    .blue .vdo{
+      margin-left: 34.5%;
+    }
+    .blue .text{
+      margin-left: 37.5%;
+    }
+    .blue .teach{
+      margin-left: 42%;
+      color: #666666;
+    }
+    .layui-colla-item{
+      position: relative;
+    }
+    .introduce{
+      position: absolute;
+      top: 12px;
+      left: 20%;
+      color: #2890CA;
+      cursor: pointer;
+    }
+    .synopsis{
+      position: absolute;
+      top: 12px;
+      left: 77%;
+      color: #2890CA;
+      cursor: pointer;
+    }
+    .courseedit{
+      position: absolute;
+      top: 12px;
+      left: 91.7%;
+      color: #F56954;
+      cursor: pointer;
+    }
+    .blue .synopsis{
+      margin-left: 45%;
+    }
+    .red .edit{
+      margin-left: 50%;
+    }
+    #add,#edit_one,#edit_two{
+      width:100%; 
+      height:100%;
+      display:none;
+    }
+    .button_div{
+      width: 80%;
+      margin-left: 185px;
+    }
+    .input{
+      width: 676px;
+    }
+    .input input{
+      border-color: #000000;
+    }
+    .input select{
+      width: 114px;
+      height: 38px;
+      border-color: #000000;
+    }
+    .name_div{
+      margin-left: 75px;
+      margin-top: 15px;
+    }
+    .datetime{
+      margin-left: 75px;  
+    }
+    .expiration{
+      margin-top: 15px;
+      margin-bottom: 25px;
+    }
+    .date_tool{
+      margin-left: 25px;
+    }
+    .add_look{
+      width: 220px;
+      height: 110px;
+      margin-left: 185px;
+      display: none;
+    }
+    .edit_look{
+      width: 220px;
+      height: 110px;
+      margin-left: 185px;
+    }
+    .edit_look img {
+      width: 110px;
+      height: 110px;
+      display: block;
+      float: left;
+    }
+    .add_handoutlook{
+      width: 90%;
+      height: 110px;
+      margin-left: 185px;
+      display: none;
+    }
+    .add_look img {
+      width: 110px;
+      height: 110px;
+      display: block;
+      float: left;
+    }
+    .add_handoutlook img {
+      width: 110px;
+      height: 110px;
+      display: block;
+      float: left;
+      margin-right: 5px;
+    }
+    #coverText,#handoutText,#edit_coverText{
+      width: 110px;
+      margin-top: 50px;
+      float: left;
+    }
+    #coverText span{
+      margin-left: 20px;
+    }
+    #handoutText span{
+      margin-left: 20px;
+    }
+    #edit_coverText a{
+      margin-left: 20px;
+    }
+    #edit_coverText span{
+      margin-left: 20px;
+    }
+    #handoutText span{
+      margin-left: 20px;
+    }
+    #coverText a{
+      margin-left: 20px;
+    }
+    #handoutText a{
+      margin-left: 20px;
+    }
+    #editText{
+      width: 110px;
+      margin-top: 50px;
+      float: left;
+    }
+    #editText span{
+      margin-left: 20px;
+    }
+    #editText a{
+      margin-left: 20px;
+    }
+    .content{
+      width: 676px;
+    }
+    .content textarea{
+      border-color: #000000;
+    }
+    .add_title,.add_chapter{
+      display: none;
+    }
+    .suc_tip{
+      float:right;
+      margin-right: 72%;
+      height: 38px;
+      line-height: 38px;
+      color: #F56954;
+    }
+    #cover,#info,#video,#hand{
+      display: none;
+    }
+    #hand img{
+      display: block;
+      width: 90%;
+      margin:5px auto 0;
+    }
+  </style>
+</head>
+<body>
+<div class="top_top">
+  <button class="layui-btn layui-btn-warm add">新 增</button>
+  <div class="layui-inline">
+    <label class="layui-form-label">课程分类:</label>
+    <div class="layui-input-inline">
+      <select name="campus" style="width:180px;height:36px;border-color:#D2D2D2;">
+        <option value="">请选择</option>
+        {volist name="list" id="svo"}
+          <option value="{$svo.classname}">{$svo.classname}</option>
+        {/volist}
+      </select>
+    </div>
+  </div>
+  <div class="layui-inline">
+    <label class="layui-form-label">课程名称:</label>
+    <div class="layui-input-inline">
+      <input type="tel" name="username" lay-verify="required|phone" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-inline">
+    <label class="layui-form-label">所属老师:</label>
+    <div class="layui-input-inline">
+      <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <button class="layui-btn layui-btn-normal select">查 询</button>
+  <button class="layui-btn layui-btn-danger reset">重 置</button>
+</div>
+<div class="tbody">
+  <div class="top">
+    <p class="first_title">课程名称</p>
+    <p class="first_title">课程封面</p>
+    <p class="first_title">课程视频</p>
+    <p class="first_title">课程讲义</p>
+    <p class="first_title">所属老师</p>
+    <p class="first_title">课程简介</p>
+    <p class="first_title">操作</p>
+  </div>
+  <div class="layui-collapse table_list" lay-accordion="">
+    {foreach name="result" item="res"}
+    <div class="layui-colla-item">
+      <h2 class="layui-colla-title">
+        <p>{$res.classname}</p>
+      </h2>
+      <div class="layui-colla-content">
+        <div class="layui-collapse" lay-accordion="">
+          {foreach name="res.info" item="info"}
+          <div class="layui-colla-item course_list" cid="{$info.courseid}">
+            <h2 class="layui-colla-title">
+              <p>{$info.coursename}</p>
+            </h2>
+            <span class="introduce open" cid="1">查看</span>
+            <span class="synopsis open" cid="2">课程简介</span>
+            <span class="courseedit">
+              <span class="course_edit">修改</span>
+              <span class="course_del">删除</span> 
+            </span>
+            {foreach name="info.chapter" item="chapter"}
+            <div class="layui-colla-content list" cid="{$chapter.chapterid}">
+              <p class="third_title first_tit">{$chapter.chaptername}</p>
+              <p class="third_title blue"></p>
+              <p class="third_title blue"><span class="vdo open" cid="3">查看</span></p>
+              <p class="third_title blue"><span class="text open" cid="4">查看</span></p>
+              <p class="third_title blue"><span class="teach">{$chapter.belongedto}</span></p>
+              <p class="third_title blue"></p>
+              <p class="third_title red">
+                <span class="edit" cid="{$chapter.chapterid}">修改</span>
+                <span class="del">删除</span>
+              </p>
+            </div>  
+            {/foreach}     
+          </div>
+          {/foreach}
+        </div>
+      </div>
+    </div>
+    {/foreach}
+    <!--<div class="layui-colla-item">
+      <h2 class="layui-colla-title">pppppp</h2>
+      <div class="layui-colla-content">
+        <p>入门1讲</p>
+      </div>
+      <div class="layui-colla-content">
+        <p>入门2讲</p>
+      </div>
+      <div class="layui-colla-content">
+        <p>入门3讲</p>
+      </div>
+    </div>-->
+  </div>
+</div>    
+<div id="add">
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">新增类型</label>
+    <div class="layui-input-block input">
+      <select id="add_choose">
+        <option value="" selected="">请选择</option>
+        <option value="1">课程介绍</option>
+        <option value="2">章节详情</option>
+      </select>
+    </div>
+  </div>
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">课程分类</label>
+    <div class="layui-input-block input">
+      <select name="add_classname">
+        <option value="">请选择</option>
+        {volist name="list" id="avo"}
+          <option value="{$avo.id}">{$avo.classname}</option>
+        {/volist}
+      </select>
+    </div>
+  </div>
+  <div class="add_title">
+    <div class="layui-form-item name_div">
+      <label class="layui-form-label">课程名称</label>
+      <div class="layui-input-block input">
+        <input type="text" id="add_coursename" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item name_div">
+      <label class="layui-form-label">课程封面</label>
+      <div class="layui-input-block input">
+        <button type="button" class="layui-btn" id="add_cover"><i class="layui-icon"></i>上传图片</button>
+      </div>
+    </div>
+    <div class="layui-upload-list add_look">
+      <img class="layui-upload-img" id="cover_look">
+      <p id="coverText"></p>
+    </div>
+    <div class="layui-form-item name_div">
+      <label class="layui-form-label">所属讲师</label>
+      <div class="layui-input-block input">
+        <input type="text" id="add_belongedto1" name="" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item layui-form-text name_div">
+      <label class="layui-form-label">课程介绍</label>
+      <div class="layui-input-block content">
+        <textarea placeholder="请输入内容" class="layui-textarea" id="add_introduction"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="add_chapter">
+    <div class="layui-form-item name_div">
+      <label class="layui-form-label">课程名称</label>
+      <div class="layui-input-block input">
+        <select id="course_tit">
+          <option value="" selected="">请先选择分类</option>
+        </select>
+      </div>
+    </div>
+    <div class="layui-form-item name_div">
+      <label class="layui-form-label">章节名称</label>
+      <div class="layui-input-block input">
+        <input type="text" id="add_chaptername" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item name_div">
+      <label class="layui-form-label">章节视频</label>
+      <div class="layui-input-block input">
+        <button type="button" class="layui-btn" id="add_video"><i class="layui-icon"></i>上传视频</button>
+        <div class="suc_tip"></div>
+      </div>
+    </div>
+    <div class="layui-form-item name_div">
+      <label class="layui-form-label">所属讲师</label>
+      <div class="layui-input-block input">
+        <input type="text" id="add_belongedto2" name="" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item name_div">
+      <label class="layui-form-label">课程讲义</label>
+      <div class="layui-input-block input">
+        <button type="button" class="layui-btn" id="add_handout"><i class="layui-icon"></i>上传图片</button>
+      </div>
+    </div>
+    <div class="layui-upload-list add_handoutlook">
+      <!-- <img class="layui-upload-img" id="handout_look">
+      <p id="handoutText"></p> -->
+    </div>
+  </div>
+  <div class="button_div">
+    <button class="layui-btn layui-btn-normal add_sure">确定</button>
+    <button class="layui-btn layui-btn-primary add_reset">重置</button>
+  </div>
+</div> 
+<!--修改-->
+<div id="edit_one">
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">课程名称</label>
+    <div class="layui-input-block input">
+      <input type="text" id="edit_coursename" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">课程封面</label>
+    <div class="layui-input-block input">
+      <button type="button" class="layui-btn" id="edit_cover"><i class="layui-icon"></i>上传图片</button>
+    </div>
+  </div>
+  <div class="layui-upload-list edit_look">
+      <img class="layui-upload-img" id="edit_cover_look">
+      <p id="edit_coverText"></p>
+    </div>
+  <div class="layui-form-item layui-form-text name_div">
+    <label class="layui-form-label">课程介绍</label>
+    <div class="layui-input-block content">
+      <textarea placeholder="请输入内容" class="layui-textarea" id="edit_introduction"></textarea>
+    </div>
+  </div>
+  <div class="button_div">
+    <button class="layui-btn layui-btn-normal edit_sure1">确定</button>
+    <button class="layui-btn layui-btn-primary edit_reset1">重置</button>
+  </div>
+</div>
+<div id="edit_two">
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">章节名称</label>
+    <div class="layui-input-block input">
+      <input type="text" id="add_chaptername" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">章节视频</label>
+    <div class="layui-input-block input">
+      <button type="button" class="layui-btn" id="add_video"><i class="layui-icon"></i>上传视频</button>
+      <div class="suc_tip"></div>
+    </div>
+  </div>
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">所属讲师</label>
+    <div class="layui-input-block input">
+      <input type="text" id="add_belongedto2" name="" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item name_div">
+    <label class="layui-form-label">课程讲义</label>
+    <div class="layui-input-block input">
+      <button type="button" class="layui-btn" id="add_handout"><i class="layui-icon"></i>上传图片</button>
+    </div>
+  </div>
+  <div class="layui-upload-list add_handoutlook">
+    <!-- <img class="layui-upload-img" id="handout_look">
+    <p id="handoutText"></p> -->
+  </div>
+  <div class="button_div">
+    <button class="layui-btn layui-btn-normal add_sure">确定</button>
+    <button class="layui-btn layui-btn-primary add_reset">重置</button>
+  </div>
+</div> 
+<!--查看层--> 
+<div id="cover">
+  <img style="display:block;width:90%;margin:20px auto 0;" />
+</div> 
+<div id="info">
+  <p style="width:90%;margin:20px auto 0;"></p>
+</div> 
+<div id="video">
+  <video style="display:block;width:90%;margin:20px auto 0;" src="" controls="controls"></video>
+</div>  
+<div id="hand">
+  
+</div>
+<script src="/edu/vendor/layui/layui.js" charset="utf-8"></script>
+<script>
+layui.use(['element','layer','jquery','upload'], function(){
+  var element = layui.element;
+  var layer = layui.layer;
+  $ = layui.jquery;
+  var upload = layui.upload;
+  var add = edit1 = edit2 = {};
+  var str = i ='';
+
+  //弹出新增窗口
+  $('.add').on("click",function(){
+    layer.open({
+        title: '添加课程'
+        ,
+        type: 1
+        ,
+        area: ['100%', '100%']
+        ,
+        id: 'layerAdd' //防止重复弹出
+        ,
+        content: $("#add")
+        ,
+        btnAlign: 'r' //按钮居中
+        ,
+        shade: 0.5 //不显示遮罩
+
+    });
+  });
+
+  //编辑
+  $('.course_edit').on("click",function(){
+    var courseid = $(this).closest('.course_list').attr('cid');
+    edit1.courseid = courseid; 
+    edit1.coursecover = null;
+    $.post('./search_one',{"courseid":courseid},function(data){
+      var msg = data.msg;
+      $('#edit_coursename').val(msg.coursename);
+      $('#edit_cover_look').attr('src',msg.coursecover);
+      $('#edit_introduction').val(msg.introduction);
+    },"json");  
+    layer.open({
+        title: '修改课程'
+        ,
+        type: 1
+        ,
+        area: ['100%', '100%']
+        ,
+        id: 'layerEdit' //防止重复弹出
+        ,
+        content: $("#edit_one")
+        ,
+        btnAlign: 'r' //按钮居中
+        ,
+        shade: 0.5 //不显示遮罩
+
+    });
+  });
+
+  $('.edit').on("click",function(){
+    var cid = $(this).attr('cid');
+    layer.open({
+        title: '修改课程'
+        ,
+        type: 1
+        ,
+        area: ['100%', '100%']
+        ,
+        id: 'layerEdit' //防止重复弹出
+        ,
+        content: $("#edit_two")
+        ,
+        btnAlign: 'r' //按钮居中
+        ,
+        shade: 0.5 //不显示遮罩
+
+    });
+  });
+
+  //select选择事件
+  $('#add_choose').on("change",function(){
+      var flag = $(this).find("option:selected").val();
+      if(!flag){
+        add = {};
+        $('.add_title').css("display","none");
+        $('.add_chapter').css("display","none");
+      }
+      if(flag==1){
+        add = {};
+        $('.add_title').css("display","block");
+        $('.add_chapter').css("display","none");
+      }
+      if(flag==2){
+        add = {};
+        $('.add_title').css("display","none");
+        $('.add_chapter').css("display","block");
+      }
+  });
+  $('select[name="add_classname"]').on("change",function(){ 
+      var flag = $('#add_choose').find("option:selected").val();
+      var id = $(this).find("option:selected").val();
+      $.post("./courselist",{"id":id},function(data){
+        var msg = data.msg;
+        var html = '';
+        $.each(msg,function(i,v){
+          html += opTag(v);
+        });
+        $('#course_tit').html(html);
+      },"json");
+  });
+
+  //封面上传
+  var uploadInst_tit = upload.render({
+    elem: '#add_cover'
+    ,url: './uploadCover/'
+    ,before: function(obj){
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('.add_look').css('display', 'block');
+        $('#cover_look').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){
+      console.log(res)
+      //如果上传失败
+      if(res.code > 0){
+        //演示失败状态，并实现重传
+        var demoText = $('#coverText');
+        demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+        demoText.find('.demo-reload').on('click', function(){
+          uploadInst_tit.upload();
+        });
+        return layer.msg('上传失败');
+      }
+      //上传成功
+      if(res.code==0){
+        $('#coverText').html('');
+        add.coursecover = res.msg;
+        return layer.msg('上传成功');    
+      }
+    }
+  });
+  //封面修改
+  var uploadInst_tit_edit = upload.render({
+    elem: '#edit_cover'
+    ,url: './uploadCover/'
+    ,before: function(obj){
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#edit_cover_look').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){
+      //如果上传失败
+      if(res.code > 0){
+        //演示失败状态，并实现重传
+        var demoText = $('#edit_coverText');
+        demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+        demoText.find('.demo-reload').on('click', function(){
+          uploadInst_tit_edit.upload();
+        });
+        return layer.msg('上传失败');
+      }
+      //上传成功
+      if(res.code==0){
+        $('#edit_coverText').html('');
+        edit1.coursecover = res.msg;
+        return layer.msg('上传成功');    
+      }
+    }
+  });
+
+
+  //视频上传
+  var uploadInst_vdo = upload.render({
+    elem: '#add_video'
+    ,url: './uploadVideo/'
+    ,accept: 'video'
+    ,done: function(res){
+      //如果上传失败
+      if(res.code > 0){
+        $('.suc_tip').html('上传失败*');
+        return layer.msg('上传失败,请重试',{time:1000});
+      }
+      //上传成功
+      if(res.code==0){
+        $('.suc_tip').html('上传成功*');
+        add.coursevideo = res.msg;
+        return layer.msg('上传成功',{time:1000});    
+      }
+    }
+  });
+
+  //讲义上传
+  var uploadInst_hand = upload.render({
+    elem: '#add_handout'
+    ,url: './uploadHandout/'
+    ,before: function(obj){
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('.add_handoutlook').css('display', 'block');
+        $('.add_handoutlook').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">');
+      });
+    }
+    ,done: function(res){
+      //如果上传失败
+      if(res.code > 0){
+        //演示失败状态，并实现重传
+        return layer.msg('上传失败');
+      }
+      //上传成功
+      if(res.code==0){
+        if(i.length==0){
+          i += res.msg;
+          str += res.msg;
+        }else{
+          str += '|';
+          str += res.msg;
+        }
+        return layer.msg('上传成功');    
+      }
+    }
+  });
+
+  //上传提交
+  $('.add_sure').on("click",function(){
+    var flag = $('#add_choose').find("option:selected").val();
+    add.flag = flag;
+    if(flag==1){
+      add.coursename = $('#add_coursename').val();
+      add.belongedto = $('#add_belongedto1').val();
+      add.introduction = $('#add_introduction').val();
+      add.classifyid = $('select[name="add_classname"]').find("option:selected").val();
+    }
+    if(flag==2){
+      add.chaptername = $('#add_chaptername').val();
+      add.belongedto = $('#add_belongedto2').val();
+      add.bookid = $('#course_tit').find("option:selected").val();
+      if(str){ add.coursehandout = str; }
+    }
+    for(i in add){
+      if(!add[i]){
+        return layer.msg('请完善数据',{time:1000}); 
+      }
+    }
+    $.post("./courseadd",add,function(data){
+      if(data.code==0){
+        location.reload();
+      }else{
+        layer.msg(data.result,{time: 1000});
+      }
+    },"json");
+  });
+  //课程修改提交
+  $('.edit_sure1').on("click",function(){
+    edit1.coursename = $('#edit_coursename').val();
+    edit1.introduction = $('#edit_introduction').val();
+    $.post("./courseedit",edit1,function(data){
+      if(data.code==0){
+        location.reload();
+      }else{
+        layer.msg(data.result,{time: 1000});
+      }
+    },"json");
+  });  
+
+  //查看事件
+  $('.open').on("click",function(){
+    var cid = $(this).attr('cid');
+    if(cid==1||cid==2){
+      var courseid = $(this).parent().attr('cid');
+      $.post('./search_one',{"courseid":courseid},function(data){
+        var msg = data.msg;
+        if(cid==1){
+          $('#cover').find('img').attr('src',msg.coursecover);
+        }
+        if(cid==2){
+          $('#info').find('p').html(msg.introduction);
+        }
+      },"json");
+      if(cid==1){ var div = 'cover'; }
+      if(cid==2){ var div = 'info'; }
+    }
+    if(cid==3||cid==4){
+      var chapterid = $(this).closest('.list').attr('cid');
+      $.post("./search_two",{"chapterid":chapterid},function(data){
+        var msg = data.msg;
+        if(cid==3){
+          $('#video').find('video').attr('src',msg.coursevideo);
+        }
+        if(cid==4){
+          var imgarr = msg.coursehandout;
+          $.each(imgarr,function(i,v){
+            $('#hand').append('<img src="'+v+'"/>');
+          });
+        }
+      },"json");
+      if(cid==3){ var div = 'video'; }
+      if(cid==4){ var div = 'hand'; }
+    }
+    layer.open({
+        title: '查看信息'
+        ,
+        type: 1
+        ,
+        area: ['50%', '80%']
+        ,
+        id: 'layerCover' //防止重复弹出
+        ,
+        content: $("#"+div)
+        ,
+        btnAlign: 'r' //按钮居中
+        ,
+        shade: 0.5 //不显示遮罩
+
+    });
+  });
+
+  //
+  function opTag(one){
+    return `<option value="${one.id}">${one.coursename}</option>`;
+  }
+});
+</script>
+
+</body>
+</html>
